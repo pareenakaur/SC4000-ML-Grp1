@@ -1,0 +1,12 @@
+===== Model Evaluation =====
+Linear Regression: RMSE = 3.836460 (±0.034469), Time: 3.03s
+Ridge Regression: RMSE = 3.890083 (±0.104944), Time: 1.91s
+Lasso Regression: RMSE = 3.835601 (±0.034905), Time: 1.65s
+ElasticNet: RMSE = 3.835727 (±0.034827), Time: 5.55s
+Random Forest: RMSE = 3.838830 (±0.030963), Time: 784.87s
+Gradient Boosting: RMSE = 3.799068 (±0.031705), Time: 144.18s
+XGBoost: RMSE = 3.788487 (±0.032346), Time: 6.46s
+LightGBM: RMSE = 3.788536 (±0.029491), Time: 4.63s
+Extra Trees: RMSE = 3.836294 (±0.031682), Time: 296.36s
+
+Best Model: XGBoost with RMSE = 3.788487
