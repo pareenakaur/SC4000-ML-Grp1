@@ -8,4 +8,16 @@ features.csv
 02_Analysis.ipynb
 03_Analysis.ipynb
 lightgbm_model.pkl
+04_Analysis.ipynb
+cust_profile_features.csv
+desktop.ini
+geographic_train_features.csv
+geographic_test_features.csv
+temporal_train_features.csv
+temporal_test_features.csv
+merchant_train_features.csv
+merchant_test_features.csv
+transaction_hist_features.csv
+geogmodel.ipynb
+data_preprocessing.ipynb
 
