@@ -1,6 +1,8 @@
 cleaned_data
 cleaned_data.zip
 elo-merchant-category-recommendation.zip
+full_train_dataset.csv
+full_test_dataset.csv
 data
 sc4000
 features.csv
