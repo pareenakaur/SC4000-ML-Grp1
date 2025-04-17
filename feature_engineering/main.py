@@ -33,8 +33,8 @@ def main():
     
     # Load transaction data
     print("Loading transaction data...")
-    historical_transactions = load_transaction_data('data/raw/historical_transactions.csv')
-    new_transactions = load_transaction_data('data/raw/new_merchant_transactions.csv')
+    historical_transactions = load_transaction_data('/home/UG/aarushi003/SC4000-ML-Grp1/data/raw/historical_transactions.csv')
+    new_transactions = load_transaction_data('/home/UG/aarushi003/SC4000-ML-Grp1/data/raw/new_merchant_transactions.csv')
     
     # Create copies for safekeeping
     historical_transactions_copy = historical_transactions.copy(deep=True)
@@ -67,8 +67,8 @@ def main():
     
     # Save checkpoint
     print("Saving transaction checkpoints...")
-    historical_transactions.to_feather('data/check_point/historical_transactions_checkpoint.feather')
-    new_transactions.to_feather('data/check_point/new_transactions_checkpoint.feather')
+    historical_transactions.to_feather('/home/UG/aarushi003/SC4000-ML-Grp1/data/check_point/historical_transactions_checkpoint.feather')
+    new_transactions.to_feather('/home/UG/aarushi003/SC4000-ML-Grp1/data/check_point/new_transactions_checkpoint.feather')
     
     # Aggregate authorized transactions
     print("Aggregating authorized transactions...")
@@ -84,8 +84,8 @@ def main():
     
     # Load train and test data
     print("Loading train and test data...")
-    train = reduce_mem_usage(read_data('data/raw/train.csv'))
-    test = reduce_mem_usage(read_data('data/raw/test.csv'))
+    train = reduce_mem_usage(read_data('/home/UG/aarushi003/SC4000-ML-Grp1/data/raw/train.csv'))
+    test = reduce_mem_usage(read_data('/home/UG/aarushi003/SC4000-ML-Grp1/data/raw/test.csv'))
     
     # Merge auth_mean features
     print("Merging authorized transaction features...")
@@ -172,8 +172,8 @@ def main():
     
     # Save checkpoint
     print("Saving train/test checkpoints...")
-    train.to_feather('data/check_point/train_checkpoint.feather')
-    test.to_feather('data/check_point/test_checkpoint.feather')
+    train.to_feather('/home/UG/aarushi003/SC4000-ML-Grp1/data/check_point/train_checkpoint.feather')
+    test.to_feather('/home/UG/aarushi003/SC4000-ML-Grp1/data/check_point/test_checkpoint.feather')
     
     # Prepare for feature engineering
     print("Preparing features for modeling...")
@@ -206,8 +206,8 @@ def main():
     
     # Save processed data
     print("Saving processed data...")
-    train.to_csv('final/data/check_point/train_c.csv')
-    test.to_csv('final/data/check_point/test_c.csv')
+    train.to_csv('/home/UG/aarushi003/SC4000-ML-Grp1/data/processed/train_c.csv')
+    test.to_csv('/home/UG/aarushi003/SC4000-ML-Grp1/data/processed/test_c.csv')
     
     # Define features for modeling
     features = [c for c in train.columns if c not in ['card_id', 'target', 'first_active_month', 'outliers',
@@ -227,7 +227,7 @@ def main():
                                           shuffle=False)
     
     # Save actual feature importances
-    actual_imp_df.to_csv('final/data/check_point/actual_imp_df.csv')
+    actual_imp_df.to_csv('/home/UG/aarushi003/SC4000-ML-Grp1/data/check_point/actual_imp_df.csv')
     
     # Calculate null importances (if needed)
     print("Calculating null feature importances...")
@@ -238,14 +238,14 @@ def main():
                                            nb_runs=80)
     
     # Save null importances
-    null_imp_df.to_feather("final/data/check_point/null_imp_df_1.feather")
+    null_imp_df.to_feather("/home/UG/aarushi003/SC4000-ML-Grp1/data/check_point/null_imp_df_1.feather")
     
     # Calculate feature scores
     print("Calculating feature correlation scores...")
     correlation_scores_df = calculate_feature_scores(actual_imp_df, null_imp_df)
     
     # Save feature scores
-    correlation_scores_df.to_csv('final/output/feature_correlation_main_lgb1.csv', index=False)
+    correlation_scores_df.to_csv('/home/UG/aarushi003/SC4000-ML-Grp1/data/processed/feature_correlation_main_lgb1.csv', index=False)
     
     print("Feature engineering pipeline completed successfully!")
 
