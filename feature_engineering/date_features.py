@@ -49,6 +49,63 @@ def add_ratio_features(df):
     """
     Add ratio features between different transaction types.
     """
+    # Make sure to check for column existence before creating ratios
+    
+    # Purchase date differences
+    if all(col in df.columns for col in ['auth_purchase_date_diff', 'new_purchase_date_diff']):
+        df['diff_purchase_date_diff'] = df['auth_purchase_date_diff'] - df['new_purchase_date_diff'] 
+    
+    if all(col in df.columns for col in ['auth_purchase_date_average', 'new_purchase_date_average']):
+        df['diff_purchase_date_average'] = df['auth_purchase_date_average'] - df['new_purchase_date_average']
+    
+    # Merchant ratios - using the exact column names from the original code
+    if 'hist_M_ID_00a6ca8a8a' in df.columns and 'hist_transactions_count' in df.columns and 'auth_transactions_count' in df.columns:
+        df['hist_00a6ca8a8a_ratio'] = df['hist_M_ID_00a6ca8a8a'] / (df['hist_transactions_count'] + df['auth_transactions_count'])
+    
+    if 'M_ID_00a6ca8a8a' in df.columns and 'new_transactions_count' in df.columns:
+        df['new_00a6ca8a8a_ratio'] = df['M_ID_00a6ca8a8a'] / df['new_transactions_count']
+    
+    # Category ratios
+    if 'auth_category_1_sum' in df.columns and 'auth_transactions_count' in df.columns:
+        df['category1_auth_ratio'] = df['auth_category_1_sum'] / df['auth_transactions_count']
+    
+    if 'new_category_1_sum' in df.columns and 'new_transactions_count' in df.columns:
+        df['category_1_new_ratio'] = df['new_category_1_sum'] / df['new_transactions_count']
+    
+    # Date ratios
+    if 'auth_purchase_date_average' in df.columns and 'new_purchase_date_average' in df.columns:
+        df['date_average_new_auth_ratio'] = df['auth_purchase_date_average'] / df['new_purchase_date_average']
+    
+    # Holiday ratios
+    for holiday in ['Children_day_2017', 'Black_Friday_2017', 'fathers_day_2017', 'Christmas_Day_2017']:
+        auth_col = f'auth_{holiday}_mean'
+        new_col = f'new_{holiday}_mean'
+        if auth_col in df.columns and new_col in df.columns:
+            ratio_col = holiday.lower().replace('_2017', '')
+            if 'day' in ratio_col:
+                ratio_col = ratio_col + '_ratio'
+            else:
+                ratio_col = ratio_col + 'day_ratio'
+            df[ratio_col] = df[auth_col] / df[new_col]
+    
+    # Time differences
+    if 'auth_purchase_date_uptonow' in df.columns and 'new_purchase_date_uptonow' in df.columns:
+        df['date_uptonow_diff_auth_new'] = df['auth_purchase_date_uptonow'] - df['new_purchase_date_uptonow']
+    
+    # Weekend ratios
+    if 'hist_weekend_category_1_sum' in df.columns and 'hist_weekend_transactions_count' in df.columns:
+        df['category1_hist_weekend_ratio'] = df['hist_weekend_category_1_sum'] / df['hist_weekend_transactions_count']
+    
+    if 'new_weekend_category_1_sum' in df.columns and 'new_weekend_transactions_count' in df.columns:
+        df['category_1_new_weekend_ratio'] = df['new_weekend_category_1_sum'] / df['new_weekend_transactions_count']
+    
+    # Handle division by zero
+    df = df.replace([np.inf, -np.inf], np.nan)
+    
+    return df
+    """
+    Add ratio features between different transaction types.
+    """
     # Purchase date differences
     df['diff_purchase_date_diff'] = df['auth_purchase_date_diff'] - df['new_purchase_date_diff'] 
     df['diff_purchase_date_average'] = df['auth_purchase_date_average'] - df['new_purchase_date_average']

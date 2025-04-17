@@ -12,8 +12,8 @@ from transaction_features import (preprocess_transactions, add_time_features,
                                 add_mode_features)
 from aggregation_features import (aggregate_transactions, aggregate_transactions_weekend,
                                 aggregate_authorized_transactions)
-from merchant_features import (add_merchant_counts, get_historical_merchant_ids, 
-                              get_new_merchant_ids, count_merchant_id)
+from merchant_features import (process_historical_merchant_ids, process_new_merchant_ids,
+                              count_merchant_id)
 from date_features import (add_date_difference_features, add_first_active_features,
                           add_ratio_features)
 from feature_importance import (get_feature_importances, calculate_null_importances,
@@ -27,9 +27,9 @@ warnings.simplefilter('ignore', RuntimeWarning)
 
 def main():
     # Create output directories if they don't exist
-    os.makedirs('output', exist_ok=True)
-    os.makedirs('data/check_point', exist_ok=True)
-    os.makedirs('final/data/check_point', exist_ok=True)
+    os.makedirs('/home/UG/aarushi003/SC4000-ML-Grp1/output', exist_ok=True)
+    os.makedirs('/home/UG/aarushi003/SC4000-ML-Grp1/data/check_point', exist_ok=True)
+    os.makedirs('/home/UG/aarushi003/SC4000-ML-Grp1/data/processed', exist_ok=True)
     
     # Load transaction data
     print("Loading transaction data...")
@@ -150,24 +150,15 @@ def main():
     del new_weekend
     gc.collect()
     
-    # Add merchant ID features
-    print("Adding merchant ID features...")
-    # Historical merchant IDs
-    hist_merchant_ids = get_historical_merchant_ids()
-    for merchant_id in hist_merchant_ids:
-        m = count_merchant_id(historical_transactions, merchant_id)
-        train = pd.merge(train, m, on='card_id', how='left')
-        test = pd.merge(test, m, on='card_id', how='left')
+    # Process merchant IDs
+    print("Processing historical merchant IDs...")
+    train, test = process_historical_merchant_ids(historical_transactions, train, test)
     
-    # New merchant IDs
-    new_merchant_ids = get_new_merchant_ids()
-    for merchant_id in new_merchant_ids:
-        m = count_merchant_id(new_transactions, merchant_id)
-        train = pd.merge(train, m, on='card_id', how='left')
-        test = pd.merge(test, m, on='card_id', how='left')
+    print("Processing new merchant IDs...")
+    train, test = process_new_merchant_ids(new_transactions, train, test)
     
     # Clean up large datasets no longer needed
-    del historical_transactions, new_transactions, m
+    del historical_transactions, new_transactions
     gc.collect()
     
     # Save checkpoint
@@ -251,4 +242,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
