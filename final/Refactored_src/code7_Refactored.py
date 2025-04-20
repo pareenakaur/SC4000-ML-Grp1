@@ -252,7 +252,7 @@ def main():
     # Configure the blending operations
     config = BlendingConfig(
         non_outlier_path='bestline_submission_without_outliers.csv',
-        outlier_likelihood_path='enhanced_submission_outliers_likelihood.csv',
+        outlier_likelihood_path='bestline_submission_outliers_likelihood2.csv',
         main_submission_path='code3_bestline_submission_main_2.csv',
         
     )
