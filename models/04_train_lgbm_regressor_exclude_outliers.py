@@ -94,7 +94,7 @@ class ModelConfig:
         """Set default LightGBM parameters if none provided"""
         if not self.lgb_params:
             self.lgb_params = {
-                'device': 'cpu',
+                'device': 'gpu',
                 'gpu_platform_id': 0,
                 'gpu_device_id': 0,
                 'num_leaves': 31,
@@ -364,11 +364,11 @@ def main():
     """Main function"""
     # Create configuration
     config = ModelConfig(
-        train_path='train_c.csv',
-        test_path='test_c.csv',
-        corr_scores_path='feature_correlation_without_outlier.csv',
-        submission_path='sample_submission.csv',
-        output_path='bestline_submission_without_outliers.csv',
+        train_path='/home/UG/aarushi003/SC4000-ML-Grp1/data/processed/train_c_improved.csv',
+        test_path='/home/UG/aarushi003/SC4000-ML-Grp1/data/processed/test_c_improved.csv',
+        corr_scores_path='/home/UG/aarushi003/SC4000-ML-Grp1/data/processed/feature_correlation_without_outlier_improved.csv',
+        submission_path='/home/UG/aarushi003/SC4000-ML-Grp1/data/raw/sample_submission.csv',
+        output_path='/home/UG/aarushi003/SC4000-ML-Grp1/output/bestline_submission_without_outliers_improved.csv',
         n_folds=7,
         feature_threshold=70
     )

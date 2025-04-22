@@ -144,6 +144,9 @@ def get_feature_importances(train, target, features, categorical_feats, shuffle=
     
     # Set LightGBM parameters
     lgb_params = {
+        'device': 'gpu', 
+        'gpu_platform_id': 0, 
+        'gpu_device_id': 0,
         'num_leaves': 31,
         'min_data_in_leaf': 32, 
         'objective': 'regression',
@@ -380,11 +383,11 @@ def main():
     """Main function to run the feature importance analysis."""
     # Set up argument parser
     parser = argparse.ArgumentParser(description='Feature Importance Analysis')
-    parser.add_argument('--train', type=str, default='train_c.csv', 
-                        help='Path to training data')
-    parser.add_argument('--test', type=str, default='test_c.csv',
-                        help='Path to test data')
-    parser.add_argument('--output_dir', type=str, default='./outputs',
+    # parser.add_argument('--train', type=str, default='train_c_improved.csv', 
+                        # help='Path to training data')
+    # parser.add_argument('--test', type=str, default='test_c_improved.csv',
+                        # help='Path to test data')
+    parser.add_argument('--output_dir', type=str, default='/home/UG/aarushi003/SC4000-ML-Grp1/data',
                         help='Directory to save outputs')
     parser.add_argument('--null_runs', type=int, default=80,
                         help='Number of permutation runs for null importance')
@@ -397,17 +400,17 @@ def main():
     args = parser.parse_args()
     
     # Create output directory if it doesn't exist
-    output_dir = Path(args.output_dir)
-    output_dir.mkdir(parents=True, exist_ok=True)
+    # output_dir = Path(args.output_dir)
+    # output_dir.mkdir(parents=True, exist_ok=True)
     
     # Load data
-    print(f"Loading data from {args.train} and {args.test}...")
+    # print(f"Loading data from {args.train} and {args.test}...")
     train_features, test_features, target, features, categorical_feats = load_data(
-        args.train, args.test
+        "/home/UG/aarushi003/SC4000-ML-Grp1/data/processed/train_c_improved.csv", "/home/UG/aarushi003/SC4000-ML-Grp1/data/processed/test_c_improved.csv"
     )
     
     # Generate importances
-    null_imp_path = output_dir / "correlation_onlyOutlier.feather"
+    null_imp_path = r"/home/UG/aarushi003/SC4000-ML-Grp1/data/check_point/correlation_without_outlier_improved.feather"
     actual_imp_df, null_imp_df = generate_null_importances(
         train_features, target, features, categorical_feats, 
         nb_runs=args.null_runs, output_path=null_imp_path
@@ -428,7 +431,7 @@ def main():
     plot_top_features(scores_df, n_top=args.top_n, output_dir=args.output_dir)
     
     # Save correlation scores
-    output_csv = output_dir / "feature_correlation_only_outlier.csv"
+    output_csv = "/home/UG/aarushi003/SC4000-ML-Grp1/data/processed/feature_correlation_only_outlier_improved.csv"
     scores_df.to_csv(output_csv, index=False)
     print(f"Saved correlation scores to {output_csv}")
     

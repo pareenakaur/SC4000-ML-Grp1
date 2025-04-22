@@ -113,6 +113,9 @@ def get_lgb_params():
     Define LightGBM parameters for CPU usage
     """
     params = {
+        'device': 'gpu',
+        'gpu_platform_id': 0,
+        'gpu_device_id': 0,
         'num_leaves': 31,
         'min_data_in_leaf': 32, 
         'objective': 'binary',
@@ -217,11 +220,11 @@ def main():
     
     # Define file paths based on your folder structure
     # These paths are relative to your current working directory
-    train_path = 'train_c.csv'
-    test_path = 'test_c.csv'
-    corr_scores_path = 'feature_correlation_only_outlier.csv'
-    submission_path = 'sample_submission.csv'  # You'll need to adjust this if it's elsewhere
-    output_path = 'bestline_submission_outliers_likelihood2.csv'
+    train_path = '/home/UG/aarushi003/SC4000-ML-Grp1/data/processed/train_c_improved.csv'
+    test_path = '/home/UG/aarushi003/SC4000-ML-Grp1/data/processed/test_c_improved.csv'
+    corr_scores_path = '/home/UG/aarushi003/SC4000-ML-Grp1/data/processed/feature_correlation_only_outlier_improved.csv'
+    submission_path = '/home/UG/aarushi003/SC4000-ML-Grp1/data/raw/sample_submission.csv'
+    output_path = '/home/UG/aarushi003/SC4000-ML-Grp1/output/bestline_submission_outliers_likelihood2_improved.csv'
     
     # Load data
     print('[INFO] Loading train and test data')
